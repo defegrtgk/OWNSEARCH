@@ -3,37 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Puter.js Free AI Chat</title>
+  <title>github</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: white;
+    /* Full screen layout */
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Chat container fills full viewport */
+    .chat-container {
       display: flex;
       flex-direction: column;
       height: 100vh;
-    }
-
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-width: 600px;
-      margin: auto;
-      border: 1px solid #444;
-      border-radius: 8px;
-      padding: 10px;
+      width: 100vw;
+      max-width: 600px; /* optional max width */
       background-color: #2d2d2d;
+      border-radius: 0;
+      box-sizing: border-box;
+      padding: 10px;
     }
 
+    /* Messages area fills remaining space and scrolls */
     .messages {
       flex: 1;
       overflow-y: auto;
       padding: 10px;
       border-bottom: 1px solid #444;
       margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
     }
 
     .message {
@@ -41,20 +48,25 @@
       max-width: 80%;
       padding: 10px;
       border-radius: 8px;
+      word-wrap: break-word;
     }
 
     .user {
       background-color: #4a90e2;
       align-self: flex-end;
+      text-align: right;
     }
 
     .puter {
       background-color: #3a3a3a;
       align-self: flex-start;
+      text-align: left;
     }
 
+    /* Input area fixed at bottom */
     .input-area {
       display: flex;
+      padding-top: 10px;
     }
 
     input[type="text"] {
@@ -79,6 +91,14 @@
     button:hover {
       background-color: #555;
     }
+
+    /* Remove max-width on smaller screens */
+    @media (max-width: 600px) {
+      .chat-container {
+        max-width: 100vw;
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -87,7 +107,7 @@
       <div class="message puter">What can I help you with?</div>
     </div>
     <div class="input-area">
-      <input type="text" id="input" placeholder="Type your message here..." />
+      <input type="text" id="input" placeholder="Type your message here..." autofocus />
       <button id="sendBtn">Send</button>
     </div>
   </div>
@@ -111,13 +131,11 @@
       const userText = input.value.trim();
       if (!userText) return;
 
-      // Show user message
       appendMessage(userText, 'user');
       input.value = '';
       input.disabled = true;
       sendBtn.disabled = true;
 
-      // Get Puter.js AI response
       try {
         const response = await puter.ai.chat(userText);
         appendMessage(response, 'puter');
